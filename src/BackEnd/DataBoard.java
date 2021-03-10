@@ -10,8 +10,8 @@ public class DataBoard {
 	public DataBoard(){
 		
 		gridSize = Configuration.Settings.getGridSize();
-		int min = 0;
-		int max = gridSize - 1;
+		min = 0;
+		max = gridSize - 1;
 		board = new BackCell[gridSize][gridSize];
 		
 		for(int i = 0; i < gridSize; i++) {
@@ -57,7 +57,6 @@ public class DataBoard {
 
 	public void setCell(int row, int col, boolean state) {
 		board[row][col].currState = state;
-		printBoard();
 	}
 	
 	public void printBoard() {

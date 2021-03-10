@@ -34,7 +34,6 @@ public class FrontCell extends JPanel implements MouseListener{
 	}
 	
 	private void changeState() {
-		System.out.println("CHANGING " + row + " " + column);
 		if(this.state==false) {
 			this.state=true;
 			this.setBackground(alive);
