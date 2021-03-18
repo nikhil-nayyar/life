@@ -5,7 +5,7 @@ import java.awt.Color;
 public class Settings {
 	
 	// Front End Settings
-	private static int gridSize = 32;	
+	private static int gridSize = 16;	
 	public static int getGridSize(){
 			return gridSize;
 	}
@@ -25,6 +25,8 @@ public class Settings {
 	private static Color buttonColor = Color.decode("#9A8F97");
 	public static Color getButtonColor() {return buttonColor;}
 
+	// Engine Settings
+	public static int generationTime = 1; // in seconds
 
 	
 }

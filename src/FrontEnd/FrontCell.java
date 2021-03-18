@@ -14,16 +14,14 @@ public class FrontCell extends JPanel implements MouseListener{
 	boolean state;
 	boolean draw;
 	PanelBoard parent;
-	DataBoard data;
 	
 	Color dead = Settings.getDeadColor();
 	Color alive = Settings.getAliveColor();
 	int row;
 	int column;
 	
-	FrontCell(int x, int y, PanelBoard input1, DataBoard input2){
+	FrontCell(int x, int y, PanelBoard input1){
 		parent = input1;
-		data = input2;
 		state = false;
 		draw = false;
 		row = x;
@@ -37,15 +35,20 @@ public class FrontCell extends JPanel implements MouseListener{
 		if(this.state==false) {
 			this.state=true;
 			this.setBackground(alive);
-			data.setCell(row, column, true);
+			parent.getData().setCell(row, column, true);
 		}
 		else {
 			this.state=false;
 			this.setBackground(dead);
-			data.setCell(row, column, false);
+			parent.getData().setCell(row, column, false);
 		}
 	}
 
+	public void setState(boolean input){
+		if(input == true) {this.setBackground(alive);}
+		else {this.setBackground(dead);}
+	}
+	
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		return;
@@ -55,6 +58,7 @@ public class FrontCell extends JPanel implements MouseListener{
 	public void mousePressed(MouseEvent e) {
 		parent.draw=true;
 		changeState();
+		//System.out.println(this.toString());
 	}
 
 	@Override
@@ -66,12 +70,18 @@ public class FrontCell extends JPanel implements MouseListener{
 	public void mouseEntered(MouseEvent e) {
 		if(parent.draw) {
 			changeState();
+			//System.out.println(this.toString());
 		}
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		return;		
+	}
+	
+	@Override
+	public String toString() {
+		return "Cell " + row + "," + column + " Current State: " + state;
 	}
 	
 }
