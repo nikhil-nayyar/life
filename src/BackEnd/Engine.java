@@ -1,47 +1,46 @@
-package BackEnd;
+package backend;
 
 import java.util.concurrent.TimeUnit;
+import configuration.Settings;
 
-import Configuration.Settings;
-import FrontEnd.PanelBoard;
-import FrontEnd.PanelControl;
-
+/**
+ * Contains methods pertaining to the operation of the application's main backend algorithms
+*/
 public class Engine implements Runnable{
 	
-	private DataBoard data;
+	private BoardBack data;
 	private int gridSize;
 	private boolean play;
-	private Thread game;
 	
-	public Engine(DataBoard input){
+	/**
+	 * Contains methods pertaining to the operation of the application's main backend algorithms
+	*/
+	public Engine(BoardBack input){
 		data = input;
 		gridSize = Settings.getGridSize() - 1;
 	}
 	
-	public void boardPause() {}
-	
+	/**
+	 * Iterates through BoardBack and performs Life computations
+	*/
 	public void boardPlay() {
 		
 		while(play) {
 			
 			for(int x = 0; x <= gridSize; x++) {
 				for(int y = 0; y <= gridSize; y++) {
-					System.out.println("Calculating " + x + " " + y);
 					calculateNextState(data.getCell(x, y));
 				}
 			}
 			
 			for(int x = 0; x <= gridSize; x++) {
 				for(int y = 0; y <= gridSize; y++) {
-					// System.out.println("Calculating " + i + " " + j);
 					updateState(data.getCell(x, y));
 				}
 			}		
-			
-			System.out.println("-----------------------");
 						
 			try {
-				TimeUnit.SECONDS.sleep(Configuration.Settings.generationTime);
+				TimeUnit.SECONDS.sleep(configuration.Settings.generationTime);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -49,19 +48,32 @@ public class Engine implements Runnable{
 		}
 	}
 	
-	public void boardReset() {}
-	
-	private void calculateNextState(BackCell backCell) {
-		int count = 0;
-		int neighbor = 0;
-		BackCell temp;
+	/**
+	 * Resets all cells in BackBoard to dead state
+	*/
+	public void boardReset() {
 		
-		System.out.println();
-				
+		for(int x = 0; x <= gridSize; x++) {
+			for(int y = 0; y <= gridSize; y++) {
+				data.getCell(x, y).setCurrState(false);
+				data.getCell(x, y).setNextState(false);
+			}
+		}
+		
+	}
+	
+	/**
+	 * Given a cell, calculates the next state by analyzing neighbors
+	 * @param backCell
+	 * 	the cell to be analyzed
+	*/
+	private void calculateNextState(CellBack backCell) {
+		int count = 0;
+		CellBack temp;
+						
 		for(int i = 0; i < 8; i++) {
 			temp = backCell.Neighbors[i];
 			if( temp != null) {
-				neighbor += 1;
 				count += temp.getCurrState() ? 1 : 0;
 			}
 		}
@@ -80,14 +92,27 @@ public class Engine implements Runnable{
 		
 	}
 
-	private void updateState(BackCell backCell) {
+	/**
+	 * Given a cell, converts the nextState to currState
+	 * @param backCell
+	 * 	the cell to be updated
+	*/
+	private void updateState(CellBack backCell) {
 		backCell.setCurrState(backCell.getNextState());
 	}
 	
+	/**
+	 * Updates the play control button to the desired state
+	 * @param input
+	 * 	desired state
+	*/
 	public void setPlay(boolean input) {play = input;}
 
+	/**
+	 * Runs the Life algorithm
+	*/
 	@Override
-	public void run() {
+	public synchronized void run() {
 		this.boardPlay();
 	}
 }

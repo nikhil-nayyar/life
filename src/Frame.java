@@ -1,48 +1,61 @@
 
+import backend.BoardBack;
+import backend.Engine;
+import configuration.Settings;
+import frontend.BoardFront;
+import frontend.ControlPanel;
+
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-
-import BackEnd.DataBoard;
-import BackEnd.Engine;
-import Configuration.Settings;
-import FrontEnd.PanelBoard;
-import FrontEnd.PanelControl;
-
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 
-public class Frame implements Runnable{
+/**
+ * main GUI window for application
+*/
+
+public class Frame{
 	
 	JFrame frame;
 	Container framePane;
-	PanelBoard board;
-	PanelControl control;
+	BoardFront board;
+	ControlPanel control;
 
-	public Frame(DataBoard data, Engine engine){
+	/**
+	 * Constructor
+	 * @param data
+	 * 	the backend data object for the application
+	 * @param engine
+	 * 	the backend algorithm object for the application
+	*/
+	public Frame(BoardBack data, Engine engine){
 		
 		// Create and Configure Main Window
-		frame = new JFrame();
+		frame = new JFrame("The Game of Life");
 		frame.setBounds(new Rectangle(600,600));
-		frame.setResizable(false);
+		frame.setResizable(true);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setIconImage(new ImageIcon("C:\\Users\\nikhi\\eclipse-workspace\\Life\\src\\cell.svg").getImage());
 		framePane = frame.getContentPane();
 		framePane.setLayout(new BorderLayout());
 		
-		// Add Gameboard
-		board = new PanelBoard(data);
+		
+		// Add backend gameboard
+		board = new BoardFront(data);
 		frame.add(board, BorderLayout.CENTER);
 
-		// Add Controlboard
-		control = new PanelControl(engine);
+		// Add frontend controls
+		control = new ControlPanel(engine);
 		control.setPreferredSize(new Dimension(0,75));
 		control.setBackground(Settings.getPanelColor());
 		frame.add(control, BorderLayout.SOUTH);
 		
-		// Add Borders
+		// Add window borders
 		JPanel topBorder = new JPanel();
 		topBorder.setPreferredSize(new Dimension(0,10));
 		topBorder.setBackground(Settings.getPanelColor());
@@ -58,22 +71,22 @@ public class Frame implements Runnable{
 		rightBorder.setBackground(Settings.getPanelColor());
 		frame.add(rightBorder, BorderLayout.WEST);
 		
-		// Refresh to Have Take Effect
+		// Refresh to have changes take effect
 		SwingUtilities.updateComponentTreeUI(frame);
 	}
 	
-	public PanelBoard getPanelBoard() {
+	/**
+	 * returns the BoardFront object used for the application
+	*/
+	public BoardFront getPanelBoard() {
 		return board;
 	}
 	
-	public PanelControl getPanelControl() {
+	/**
+	 * returns the ControlPanel object used for the application
+	*/
+	public ControlPanel getPanelControl() {
 		return control;
-	}
-
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		System.out.println("FRAME RUNNING");
 	}
 
 }

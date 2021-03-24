@@ -1,17 +1,23 @@
-import BackEnd.DataBoard;
-import BackEnd.Engine;
+import backend.BoardBack;
+import backend.Engine;
 
+/**
+ * This is the main class running Conway's Game of Life.
+ * 
+ * It instantiates the Front End GUI [frame], the Back End data structures [data] and the Back End algorithms [engine]
+ */
 public class main {
 	
 	static Frame frame;
-	static DataBoard data;
+	static BoardBack data;
 	static Engine engine;
 	
-    @SuppressWarnings("unused")
-	public static void main(String[] args) {
-		System.out.println("THE GAME OF LIFE");
-		
-		DataBoard data = new DataBoard();
+	/**
+	 * Instantiates and links Front End and Back End components
+	 */
+    public static void main(final String[] args) {
+
+		BoardBack data = new BoardBack();
 		Engine engine = new Engine(data);
 		Frame frame = new Frame(data, engine);
 		data.setPanel(frame.getPanelBoard());
